@@ -1,0 +1,15 @@
+.caratula{
+  display:flex;
+  flex-flow: column;
+  align-content: space-around;
+  page-break-after: always;
+}
+.caratula h1{
+}
+.caratula h2{
+}
+img{
+  width:100%;
+  height:auto;
+
+}
