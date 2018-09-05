@@ -1,15 +1,28 @@
+* {
+  font-family: sans;
+}
+
 .caratula{
   display:flex;
   flex-flow: column;
-  align-content: space-around;
+  align-content: space-between;
   page-break-after: always;
 }
 .caratula h1{
+  margin:auto;
+  text-align: center;
+  font-size: 6em;
 }
 .caratula h2{
+  margin:auto;
+  text-align: center;
+  font-size: 4em;
+}
+.caratula ul {
+  margin-left: 2em;
+  font-size: 1.5em;
 }
 img{
   width:100%;
   height:auto;
-
 }

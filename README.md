@@ -11,5 +11,5 @@ Integrantes:
 
 ## Como generar los pdfs
 ```
-pandoc -f markdown_mmd+yaml_metadata_block -o informe_tp1.pdf informe_tp1.md
+pandoc -f markdown_mmd+yaml_metadata_block -o informe_tp1.pdf informe_tp1.md -t html  -s --css informes.css
 ```
