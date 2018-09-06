@@ -22,10 +22,28 @@ Al estar todos los eventos en un mismo dataframe, creimos que los eventos iban a
 ![](imgs/Proporcion de columnas nulas por evento.svg)
 Efectivamente, dependiendo del tipo de evento, las columnas son nulas o no en un 100%, con excepción del campo `search_term` en el que hay una pequeña proporción de nulos.
 
+# Exploracion
+
 ## Exploración de tipos de evento por separado
+
+### Eventos de búsqueda
 Procedemos a ver si hay registros inválidos de busquedas, y si amerita dropear registros.
 Por un lado, hay una proporción importante (7k nulos en 56k total) de eventos de busqueda que tienen `NaN` como `search_term`, pero tienen distintas listas de `skus`, por lo que podemos suponer que hay otros factores que afectan a la busqueda.
 
-# Exploracion
+### Eventos de visita de sitio
+Consideramos la resolución de pantalla una forma de ver qué poder adquisitivo tienen las personas que visitan el sitio.
+Medimos la cantidad de píxeles de las pantallas, porque hay muchas variantes de resoluciones y solo nos importa el tamaño.
+![](imgs/Distribución de cantidad de pixeles de las pantallas.svg)
+
+Nos interesó también que proporcion de los usuarios accedian desde mobile y cuántos desde desktop
+![](imgs/Tipos de dispositivos.svg)
+
+## Exploracion de los eventos en conjunto
+El uso de la plataforma aumentó enormemente a lo largo de los últimos meses:
+![](imgs/distribución de eventos en el tiempo.svg)
+Y la distribución de los eventos a lo largo del dia no nos da muchas sorpresas:
+![](imgs/Distribucion de eventos en las horas del dia.svg)
+
+
 
 # Insights
