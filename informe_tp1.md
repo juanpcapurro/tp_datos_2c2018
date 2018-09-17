@@ -43,7 +43,16 @@ El uso de la plataforma aumentó enormemente a lo largo de los últimos meses:
 ![](imgs/distribución de eventos en el tiempo.svg)
 Y la distribución de los eventos a lo largo del dia no nos da muchas sorpresas:
 ![](imgs/Distribucion de eventos en las horas del dia.svg)
+Los usuarios pueden tener una cantidad variable de eventos, y es usual que tengan algunos cientos.
+![](imgs/cantidad de eventos por persona.svg)
 
+## Exploraciones de los distintos modelos
+Encontramos que incluso filtrando aquellos modelos con menos de 100 eventos, buscar cuáles presentaban mejor ratio de leads introducía bastante ruido. Por ejemplo, aparecían modelos sin conversiones, por lo que consideramos esta columna relativamente desestimable.
+
+Por otro lado, encontramos que los modelos con más vistas no overlapean mucho con los que tienen mayor ratio de conversiones:
+
+![](imgs/Distribucion de eventos en los modelos mas populares.svg)
+![](imgs/Distribucion de eventos en los modelos con mejor conversion rate.svg)
 
 
 # Insights
