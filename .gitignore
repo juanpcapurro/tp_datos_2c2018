@@ -2,3 +2,4 @@ data
 Session.vim
 vimlocal
 tags
+.ipynb_checkpoints/
