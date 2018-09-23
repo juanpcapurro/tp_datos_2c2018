@@ -37,7 +37,7 @@ Este análisis previo de como se relacionan los campos del dataset entre sí nos
 
 Analizando el set decidimos que podría ser bastante útil e interesante hacer análisis no solo de acuerdo al modelo del dispositivo, sino también de acuerdo a la marca dueña del mismo. 
 
-Esta nueva feature nos permitiría analizar los resultados discriminando por empresas, y no solo por modelo. Por ejemplo evaluar cuál es la empresa de más renombre en la venta de dispositivos usados. La mayoria de las marcas tienen varios modelos. Y esta nueva feature nos permitira tener una visión más global de los agentes influyentes en el set de datos.1
+Esta nueva feature nos permitiría analizar los resultados discriminando por empresas, y no solo por modelo. Por ejemplo evaluar cuál es la empresa de más renombre en la venta de dispositivos usados. La mayoria de las marcas tienen varios modelos. Y esta nueva feature nos permitira tener una visión más global de los agentes influyentes en el set de datos.
 
 
 
@@ -49,6 +49,26 @@ Esta nueva feature nos permitiría analizar los resultados discriminando por emp
 ### Eventos de búsqueda
 Procedemos a ver si hay registros inválidos de busquedas, y si amerita dropear registros.
 Por un lado, hay una proporción importante (7k nulos en 56k total) de eventos de busqueda que tienen `NaN` como `search_term`, pero tienen distintas listas de `skus`, por lo que podemos suponer que hay otros factores que afectan a la busqueda.
+
+### Busquedas por motores
+
+La idea de este análisis era evaluar cuál es el motor de busqueda más usado para llegar a los productos de la página. Al principio, supusimos que el motor de búsqueda más usado iba a ser Google. Dado que es uno de los motores de busquedas más usados a nivel global y este dato es de conocimiento común. Sin embargo, decidimos llevar a cabo este análisis para terminar de confirmar (o no) nuestras hipótesis. Obtuvimos el siguiente resultado:
+
+![](imgs/Motores de busqueda.svg)
+
+Tal y como era de esperarse, Google salió en primer lugar, por una diferencia abismal con el resto de los motores. Suponiamos que Google iba a ser el motor de búsqueda más usado, pero no teniamos idea de como iba a ser la relación respecto al uso de los otros motores de busqueda. Suponiamos que al menos el resto de los motores iban a sumar por lo menos un cuarto de las busquedas hechas por Google, pero ni siquiera se acercan. De hecho en el gráfico su presencia respecto a los 50 000 busquedas por Google es despreciable.
+
+Curiosamente, la distribución del ranking se constrasta con este artículo publicado en este [blog](https://www.reliablesoft.net/top-10-search-engines-in-the-world/) y en tantos otros.
+
+Es decir, los motores de busqueda más usados a nivel global son:
+
+* Google
+* Bing
+* Yahoo
+* Ask
+  
+Lo cuál se refleja exactamente en nuestro análisis, y si nos ponemos a pensar, tiene bastante sentido. Ya que las proporciones a nivel global son relativamente equivalentes cuando lo analizás por tópicos aislados.
+
 
 ### Eventos de visita de sitio
 Consideramos la resolución de pantalla una forma de ver qué poder adquisitivo tienen las personas que visitan el sitio.
