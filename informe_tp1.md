@@ -125,4 +125,21 @@ Por otro lado, encontramos que los modelos con más vistas no overlapean mucho c
 ![](imgs/Distribucion de eventos en los modelos con mejor conversion rate.svg)
 
 
+## Exploración sobre los usuarios
+
+Pudimos observar que en el caso del primer evento del usuario, se hallan en el mismo segundo varios otros eventos de tipos relacionados, que refieren a la misma accion pero desde distintos puntos de vista:
+![](imgs/Conjunto de primer evento.svg)
+Por ejemplo, lo más usual es que se llegue a visitar el sitio por un ad campaign hit desde un search engine.
+
+En cuanto a los ultimos eventos de un usuario, estos no suelen aparecer en grupos
+![](imgs/Conjunto de ultimo evento.svg)
+
+### Distribución temporal de los eventos
+
+Los usuarios pasan cantidads de tiempo muy variadas en la plataforma, y se puede destacar que hay una proporción alta de outliers que tienen eventos separados por varios miles de horas. Estos no son mostrados en el gráfico porque lo volverían ilegible.
+
+![](imgs/Tiempo que pasan los usuarios en el sitio.svg)
+Por otro lado, no se encontró relación entre el tiempo que un usuario lleva usando el sitio y la cantidad de eventos de algún tipo en particular que genera.
+
+
 # Insights
