@@ -22,7 +22,8 @@ margin-bottom: 0.5in
 ## Pre-análisis del set de datos
 
 Al estar todos los eventos en un mismo dataframe, creimos que los eventos iban a tener una cantidad importante de columnas nulas dependiendo del tipo de evento.
-![](imgs/Proporcion de columnas nulas por evento.svg)
+
+![](imgs/Columnas nulas por evento.svg)
 
 Dependiendo del tipo de evento, las columnas son nulas o no en un 100%, con excepción del campo `search_term` en el que hay una pequeña proporción de nulos. En definitiva, podemos decir que este set de datos es bastante consistente en cuanto a los datos de los cuales podemos sacar conclusiones directamente.
 
@@ -30,6 +31,8 @@ Gracias al gráfico de los datos nulos, podemos identificar rápidamente que fea
 
 Por ejemplo, observando el gráfico podemos ver que podemos relacionar directamente el campo _conversion_ con los campos _sku, model, condition y storage_. Es decir, podemos observar si vale la pena sacar conclusiones de las ventas realizadas de acuerdo a sku, el modelo, la condición y el tamaño de la memoria del dispositivo. 
 También, nos sirve para descartar ideas que no son factibles directamente. Por ejemplo, no podemos relacionar directamente la cantidad de _conversion_ con el campo _city_ o _region_, ya que todos los tipos de eventos que surgieron como resultado de una compra, no tienen estos campos.
+
+<!-- TODO: Relacionar esos campos propagando los datos de visited_site -->
 
 Este análisis previo de como se relacionan los campos del dataset entre sí nos ahorró bastante tiempo a la hora de saber por qué lado encarar los análisis.
 
@@ -39,7 +42,7 @@ Analizando el set decidimos que podría ser bastante útil e interesante hacer a
 
 Esta nueva feature nos permitiría analizar los resultados discriminando por empresas, y no solo por modelo. Por ejemplo evaluar cuál es la empresa de más renombre en la venta de dispositivos usados. La mayoria de las marcas tienen varios modelos. Y esta nueva feature nos permitira tener una visión más global de los agentes influyentes en el set de datos.
 
-
+![](imgs/Marcas mas buscadas y compradas a traves de motor de busqueda.svg)
 
 # Exploracion
 
@@ -61,7 +64,6 @@ Tal y como era de esperarse, Google salió en primer lugar, por una diferencia a
 Curiosamente, la distribución del ranking se constrasta con este artículo publicado en este [blog](https://www.reliablesoft.net/top-10-search-engines-in-the-world/) y en tantos otros.
 
 Es decir, los motores de busqueda más usados a nivel global son:
-
 * Google
 * Bing
 * Yahoo
@@ -78,13 +80,21 @@ Medimos la cantidad de píxeles de las pantallas, porque hay muchas variantes de
 Nos interesó también que proporcion de los usuarios accedian desde mobile y cuántos desde desktop
 ![](imgs/Tipos de dispositivos.svg)
 
-## Exploracion de los eventos en conjunto
+# Exploracion de los eventos en conjunto
 El uso de la plataforma aumentó enormemente a lo largo de los últimos meses:
+
 ![](imgs/distribución de eventos en el tiempo.svg)
+Hay una aparente caída de la cantidad de eventos en el último mes, pero esto es consecuencia de que los datos para este se encuentran truncados a mitad de mes.
+
 Y la distribución de los eventos a lo largo del dia no nos da muchas sorpresas:
+
 ![](imgs/Distribucion de eventos en las horas del dia.svg)
-Los usuarios pueden tener una cantidad variable de eventos, y es usual que tengan algunos cientos.
-![](imgs/cantidad de eventos por persona.svg)
+
+Los usuarios pueden tener una cantidad variable de eventos, y es usual que tengan algunos cientos, con outliers teniendo un par de miles. Estos outliers no aparecen en el gráfico porque lo volverían ilegible.
+
+![](imgs/Cantidad de eventos general vs compradores.svg)
+
+Los usuarios que realizan una conversión tienen general muchos más eventos que el público en general.
 
 ## Exploraciones de los distintos modelos
 Encontramos que incluso filtrando aquellos modelos con menos de 100 eventos, buscar cuáles presentaban mejor ratio de leads introducía bastante ruido. Por ejemplo, aparecían modelos sin conversiones, por lo que consideramos esta columna relativamente desestimable.
@@ -92,8 +102,15 @@ Encontramos que incluso filtrando aquellos modelos con menos de 100 eventos, bus
 Por otro lado, encontramos que los modelos con más vistas no overlapean mucho con los que tienen mayor ratio de conversiones:
 
 ![](imgs/Distribucion de eventos en los modelos mas populares.svg)
+
 ![](imgs/Distribucion de eventos en los modelos con mejor conversion rate.svg)
 
+## Ventas por mes y marca
+En general las ventas por marca tienen una distribución algo parecidas al market share de las distintas empresas [a nivel global](https://www.statista.com/statistics/271496/global-market-share-held-by-smartphone-vendors-since-4th-quarter-2009/)
+![](imgs/Marcas mas buscadas y compradas a traves de motor de busqueda.svg)
+Pero se puede ver que Samsung tiene una parte mas grande de las ventas en la plataforma que a nivel global.
+
+Las ventas por mes muestran que, por un lado, los datos están truncados en el ultimo mes, y que hubo pequeñas fluctuaciones en la proporción de ventas de Motorola respecto a las demás, pero siempre se mantuvo en primer lugar Samsung, seguido de Apple.
 
 ## Exploración sobre los usuarios
 
