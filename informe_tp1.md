@@ -19,6 +19,15 @@ margin-bottom: 0.5in
 
 # Introducción 
 
+## Pre-análisis del sitio
+
+Lo primero que hicimos antes de empezar a análizar el set de datos fue analizar la página de Trocafone a ver como podíamos relacionar los tipos de datos, de donde surgian y cómo.
+
+Sabiamos que teniamos un campo _person_ en el set de datos, pero no sabiamos de dónde surgia este ID. Si estaba relacionado con una cuenta de la página, o si estaba relacionado con la sesión del navegador. Una de las primeras cosas que notamos al sumergirnos en la página es que no contaba con un sistema de login. Entonces nos surgió la siguiente pregunta: ¿De dónde salía este ID?.
+Evidentemente, el evento de una única persona podría estar asociado a varios ID's distintos, ya que dependia del dispositivo del cuál estuviese usando la persona. A grandes rasgos, no representa ninguna desventaja a la hora de hacer análisis globales, pero perdíamos pequeños datos relacionados con los movimientos de las personas y podrian surgir algunas inconsistencias en el set de datos como por ejemplo: Una persona podria entrar a comprar un producto directamente sin pasar previamente por un motor de busqueda o una campaña publicitaria, entrando al link del producto directamente. Esto podria pasar cuando una persona ingresa por un dispositivo y se reenvia el link del producto y termina realizand la compra por otro. 
+Teniendo en cuenta este tipo de situaciones, es que consideramos no tomar tales eventos como datos anómalos.
+
+
 ## Pre-análisis del set de datos
 
 Al estar todos los eventos en un mismo dataframe, creimos que los eventos iban a tener una cantidad importante de columnas nulas dependiendo del tipo de evento.
@@ -70,6 +79,27 @@ Es decir, los motores de busqueda más usados a nivel global son:
 * Ask
   
 Lo cuál se refleja exactamente en nuestro análisis, y si nos ponemos a pensar, tiene bastante sentido. Ya que las proporciones a nivel global son relativamente equivalentes cuando lo analizás por tópicos aislados.
+
+### Compras realizadas a traves de busquedas por motores.
+
+Analizando el gráfico que hicimos inicialmente en el preprocesamiento de datos nos dimos cuenta de que no podíamos relacionar directamente a las personas que venian de realizar una busqueda a través de un motor y si terminaban haciendo una compra.
+Pero podiamos vincularlos a través del ID haciendo un merge entre ambos eventos. 
+
+Antes de realizar este análisis necesitamos saber cuales son las marcas más compradas, sin tener en cuenta el evento por el cual llegaron a la página. 
+
+![](imgs/Marcas mas compradas.svg)
+
+Ahora discrinamos aquellos ID's los cuales llegaron por medio de un motor de busqueda, y realizamos el mismo plot:
+
+![](imgs/Marcas mas buscadas y compradas a traves de motor de busqueda.svg)
+
+Lo primero que podemos observar es que no todas las compras efectuadas son realizadas por personas que llegaron a partir de un motor de busqueda. Hay algunas compras hechas por personas que se realizaron y no sabemos a través de donde llegaron. Suponemos que son movimientos realizados de diferentes dispositivos y perdimos la relacion. Además, sabemos que los eventos de campañas publicitarias también disparan los eventos de busquedas a través de motores. (Este dato lo obtuvimos durante el preprocesamiento analizando los timestamp, notamos que en un mismo segundo se realizaban multiples eventos)
+
+Si comparamos ambos análisis, podemos ver que las marcas más vendidas, son las marcas de las cuales tenemos menos registros de donde vinieron, por ejemplo Apple y Samsung. Esto puede deber a dos cosas:
+
+1) Las personas que compran productos de dichas marcas, tardan más en decidirse si comprar el producto, y lo analizan entrando desde distintos dispositivos. Sabemos que Apple y Samsung tienen los modelos de celulares más caros y más vendidos (i.e.:La gama de los Samsung Galaxy y los iphones.)
+2) El resultado de que las compras en dichas marcas no tengan como origen una busqueda por navegador es consecuencia del volumen de datos únicamente, y se repite en la misma proporcion para todas las marcas, solo que al ser menores las ventas el fenómeno es menos apreciable.
+
 
 
 ### Eventos de visita de sitio
