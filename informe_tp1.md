@@ -4,6 +4,8 @@ margin-left:   0.5in
 margin-right:  0.5in
 margin-top:    0.5in
 margin-bottom: 0.5in
+title:         .
+toc:           true
 ...
 
 <div class="caratula">
@@ -15,7 +17,7 @@ margin-bottom: 0.5in
         <li>Juan Pablo Capurro</li>
     </ul>
     <ul>
-    <li><b>Github</b> <a href="https://github.com/juanpcapurro/tp_datos_2c2018">https://github.com/juanpcapurro/tp_datos_2c2018</a> </li>
+    <li><b>Git repo: </b> <a href="https://github.com/juanpcapurro/tp_datos_2c2018">https://github.com/juanpcapurro/tp_datos_2c2018</a> </li>
     </ul>
 </div>
 
@@ -94,9 +96,12 @@ Suponíamos que Google iba a ser el motor de búsqueda más usado, pero no tení
 Suponíamos que al menos el resto de los motores iban a sumar por lo menos un cuarto de las búsquedas hechas por Google, pero ni siquiera se acercan.
 De hecho en el gráfico su presencia respecto a los 50 000 búsquedas por Google es despreciable.
 
-Curiosamente, la distribución del ranking se contrasta con este artículo publicado en este [blog](https://www.reliablesoft.net/top-10-search-engines-in-the-world/) y en tantos otros.
+Curiosamente, la distribución del ranking se contrasta con este artículo publicado en este blog[^blogpost-motores] y en tantos otros.
+
+[^blogpost-motores]: https://www.reliablesoft.net/top-10-search-engines-in-the-world/
 
 Es decir, los motores de búsqueda más usados a nivel global son:
+
 * Google
 * Bing
 * Yahoo
@@ -168,7 +173,10 @@ Por otro lado, encontramos que los modelos con más vistas no overlapean mucho c
 ![](imgs/Distribucion de eventos en los modelos con mejor conversion rate.svg)
 
 ## Ventas por mes y marca
-En general las ventas por marca tienen una distribución algo parecidas al market share de las distintas empresas [a nivel global](https://www.statista.com/statistics/271496/global-market-share-held-by-smartphone-vendors-since-4th-quarter-2009/)
+En general las ventas por marca tienen una distribución algo parecidas al market share de las distintas empresas a nivel global [^market-share]
+
+[^market-share]: https://www.statista.com/statistics/271496/global-market-share-held-by-smartphone-vendors-since-4th-quarter-2009/
+
 ![](imgs/Marcas mas buscadas y compradas a traves de motor de busqueda.svg)
 Pero se puede ver que Samsung tiene una parte mas grande de las ventas en la plataforma que a nivel global.
 
@@ -190,5 +198,6 @@ Los usuarios pasan cantidades de tiempo muy variadas en la plataforma, y se pued
 ![](imgs/Tiempo que pasan los usuarios en el sitio.svg)
 Por otro lado, no se encontró relación entre el tiempo que un usuario lleva usando el sitio y la cantidad de eventos de algún tipo en particular que genera.
 
+## Distribucion de los usuarios en el país
 
-# Insights
+![](imgs/Visited Sites by country zones.png)
