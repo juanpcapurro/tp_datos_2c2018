@@ -35,10 +35,7 @@ Una de las primeras cosas que notamos al sumergirnos en la página es que no con
 Entonces nos surgió la siguiente pregunta: ¿De dónde salía este ID?.
 Evidentemente, el evento de una única persona podría estar asociado a varios ID's distintos, ya que dependía del dispositivo del cuál estuviese usando.
 
-A grandes rasgos, no representa ninguna desventaja a la hora de hacer análisis globales, pero perdíamos pequeños datos relacionados con los movimientos de las personas y podrían surgir algunas inconsistencias en el set de datos como por ejemplo: Una persona podría entrar a comprar un producto directamente sin pasar previamente por un motor de búsqueda o una campaña publicitaria, entrando al link del producto.
-
-Esto podría pasar cuando una persona ingresa por un dispositivo y se reenvía el link del producto y termina realizando la compra por otro. 
-Teniendo en cuenta este tipo de situaciones, es que consideramos no tomar tales eventos como datos anómalos.
+A grandes rasgos, no representa ninguna desventaja a la hora de hacer análisis globales, pero perdíamos pequeños datos relacionados con los movimientos de las personas y podrían surgir algunas particularidades en el set de datos como por ejemplo: Una persona podría entrar a comprar un producto directamente sin pasar previamente por un motor de búsqueda o una campaña publicitaria, entrando al link del producto.
 
 ## Pre-análisis del set de datos
 
@@ -57,9 +54,7 @@ Es decir, podemos observar si vale la pena sacar conclusiones de las ventas real
 También, nos sirve para descartar ideas que no son factibles directamente.
 Por ejemplo, no podemos relacionar directamente la cantidad de _conversion_ con el campo _city_ o _region_, ya que todos los tipos de eventos que surgieron como resultado de una compra, no tienen estos campos.
 
-<!-- TODO: Relacionar esos campos propagando los datos de visited_site -->
-
-Este análisis previo de como se relacionan los campos del dataset entre sí nos ahorró bastante tiempo a la hora de saber por qué lado encarar los análisis.
+En una [seccion posterior][propagacion de datos de eventos] se verá más en detalle cómo relacionar estos registros.
 
 ## Nueva feature: Marca del dispositivo
 
@@ -72,80 +67,24 @@ Y esta nueva feature nos permitirá tener una visión más global de los agentes
 
 # Exploración
 
-
 ## Exploración de tipos de evento por separado
 
 ### Eventos de búsqueda
 Procedemos a ver si hay registros inválidos de búsquedas, y si amerita dropear registros.
 Por un lado, hay una proporción importante (7k nulos en 56k total) de eventos de búsqueda que tienen `NaN` como `search_term`, pero tienen distintas listas de `skus`, por lo que podemos suponer que hay otros factores que afectan a la búsqueda.
 
-### Búsquedas por motores
-
-La idea de este análisis era evaluar cuál es el motor de búsqueda más usado para llegar a los productos de la página.
-Al principio, supusimos que el motor de búsqueda más usado iba a ser Google.
-
-Dado que es uno de los motores de búsquedas más usados a nivel global y este dato es de conocimiento común.
-Sin embargo, decidimos llevar a cabo este análisis para terminar de confirmar (o no) nuestras hipótesis.
-Obtuvimos el siguiente resultado:
-
-![](imgs/Motores de busqueda.svg)
-
-Tal y como era de esperarse, Google salió en primer lugar, por una diferencia abismal con el resto de los motores.
-Suponíamos que Google iba a ser el motor de búsqueda más usado, pero no teníamos idea de como iba a ser la relación respecto al uso de los otros motores de búsqueda.
-
-Suponíamos que al menos el resto de los motores iban a sumar por lo menos un cuarto de las búsquedas hechas por Google, pero ni siquiera se acercan.
-De hecho en el gráfico su presencia respecto a los 50 000 búsquedas por Google es despreciable.
-
-Curiosamente, la distribución del ranking se contrasta con este artículo publicado en este blog[^blogpost-motores] y en tantos otros.
-
-[^blogpost-motores]: https://www.reliablesoft.net/top-10-search-engines-in-the-world/
-
-Es decir, los motores de búsqueda más usados a nivel global son:
-
-* Google
-* Bing
-* Yahoo
-* Ask
-
-Lo cuál se refleja exactamente en nuestro análisis, y si nos ponemos a pensar, tiene bastante sentido.
-Ya que las proporciones a nivel global son relativamente equivalentes cuando lo analizás por tópicos aislados.
-
-### Compras realizadas a través de búsquedas por motores.
-
-Analizando el gráfico que hicimos inicialmente en el pre-procesamiento de datos nos dimos cuenta de que no podíamos relacionar directamente a las personas que venían de realizar una búsqueda a través de un motor y si terminaban haciendo una compra.
-Pero podíamos vincularlos a través del ID haciendo un merge entre ambos eventos. 
-
-Antes de realizar este análisis necesitamos saber cuales son las marcas más compradas, sin tener en cuenta el evento por el cual llegaron a la página. 
-
-![](imgs/Marcas mas compradas.svg)
-
-Ahora discernamos aquellos ID's los cuales llegaron por medio de un motor de búsqueda, y realizamos el mismo plot:
-
-![](imgs/Marcas mas buscadas y compradas a traves de motor de busqueda.svg)
-
-Lo primero que podemos observar es que no todas las compras efectuadas son realizadas por personas que llegaron a partir de un motor de búsqueda.
-Hay algunas compras hechas por personas que se realizaron y no sabemos a través de donde llegaron.
-
-Suponemos que son movimientos realizados de diferentes dispositivos y perdimos la relación.
-Además, sabemos que los eventos de campañas publicitarias también disparan los eventos de búsquedas a través de motores.
-(Este dato lo obtuvimos durante el pre-procesamiento analizando los timestamp, notamos que en un mismo segundo se realizaban múltiples eventos)
-
-Si comparamos ambos análisis, podemos ver que las marcas más vendidas, son las marcas de las cuales tenemos menos registros de donde vinieron, por ejemplo Apple y Samsung.
-Esto puede deber a dos cosas:
-
-1. Las personas que compran productos de dichas marcas, tardan más en decidirse si comprar el producto, y lo analizan entrando desde distintos dispositivos.
-Sabemos que Apple y Samsung tienen los modelos de celulares más caros y más vendidos (i.e.:La gama de los Samsung Galaxy y los iphones.)
-2. El resultado de que las compras en dichas marcas no tengan como origen una búsqueda por navegador es consecuencia del volumen de datos únicamente, y se repite en la misma proporción para todas las marcas, solo que al ser menores las ventas el fenómeno es menos apreciable.
-
-
-
 ### Eventos de visita de sitio
+<!--TODO: mover esto a donde se propagan los eventos y relacionar la resolucion con las compras-->
 Consideramos la resolución de pantalla una forma de ver qué poder adquisitivo tienen las personas que visitan el sitio.
 Medimos la cantidad de pídeles de las pantallas, porque hay muchas variantes de resoluciones y solo nos importa el tamaño.
 ![](imgs/Distribución de cantidad de pixeles de las pantallas.svg)
 
-Nos interesó también que proporción de los usuarios accedían desde motile y cuántos desde desktop
+Nos interesó también que proporción de los usuarios accedían desde mobile y cuántos desde desktop
 ![](imgs/Tipos de dispositivos.svg)
+
+Volviendo a las resoluciones de pantalla, mirar el listado nos permite ver cuáles son las mas populares, lo que es congruente con el primer gráfico de este apartado:
+![](imgs/Cantidad por tipos de resoluciones.svg)
+La mayoría de las visitas son desde dispositivos con resoluciones de pantalla bajas, lo cual confirma nuestra presuposición de que los usuarios del sitio son de bajo poder adquisitivo, o por lo menos no lo reflejan en los dispositivos que usan para acceder al sitio.
 
 # Exploración de los eventos en conjunto
 El uso de la plataforma aumentó enormemente a lo largo de los últimos meses:
@@ -196,7 +135,11 @@ En cuanto a los últimos eventos de un usuario, estos no suelen aparecer en grup
 Los usuarios pasan cantidades de tiempo muy variadas en la plataforma, y se puede destacar que hay una proporción alta de outliers que tienen eventos separados por varios miles de horas. Estos no son mostrados en el gráfico porque lo volverían ilegible.
 
 ![](imgs/Tiempo que pasan los usuarios en el sitio.svg)
+TODO: rehacer esto sacando los outliers.
 Por otro lado, no se encontró relación entre el tiempo que un usuario lleva usando el sitio y la cantidad de eventos de algún tipo en particular que genera.
+
+## Propagacion de datos de eventos
+TODO
 
 ## Distribucion de los usuarios en el país
 
