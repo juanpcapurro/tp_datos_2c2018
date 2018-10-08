@@ -73,6 +73,10 @@ Y esta nueva feature nos permitirá tener una visión más global de los agentes
 Procedemos a ver si hay registros inválidos de búsquedas, y si amerita dropear registros.
 Por un lado, hay una proporción importante (7k nulos en 56k total) de eventos de búsqueda que tienen `NaN` como `search_term`, pero tienen distintas listas de `skus`, por lo que podemos suponer que hay otros factores que afectan a la búsqueda.
 
+Respecto a qué terminos son buscados, puede verse en el siguiente word cloud que hay una predominancia clara de 'iphone', seguido de 'samsung galaxy' y varios modelos de 'moto g'
+
+![](imgs/Word Cloud de palabras mas buscadas.svg)
+
 
 ## Campañas publicitarias
 Nos interesó saber si había relación entre las campañas que atraían la mayor cantidad de usuarios y si había diferencias significativas con aquellas que aportan más conversiones:
@@ -81,7 +85,7 @@ Nos interesó saber si había relación entre las campañas que atraían la mayo
 
 ![](imgs/Conversiones por campaña publicitaria.svg)
 
-Si bien en las campañas más grandes hay mayor relación entre las que traen mas visitas y las que traen mas conversiones, hay algunos cambios en las más chicas, y puede verse que hay algunas campañas para las que no hay ninguna conversión.
+Si bien en las campañas más grandes hay mayor relación entre las que traen mas visitas y las que traen mas conversiones, hay algunos cambios en las más chicas, y puede verse que hay varias campañas para las que no hay ninguna conversión.
 
 # Exploración de los eventos en conjunto
 El uso de la plataforma aumentó enormemente a lo largo de los últimos meses:
@@ -132,14 +136,14 @@ Las ventas por mes muestran que, por un lado, los datos están truncados en el u
 
 Pudimos observar que en el caso del primer evento del usuario, se hallan en el mismo segundo varios otros eventos de tipos relacionados, que refieren a la misma acción pero desde distintos puntos de vista:
 ![](imgs/Conjunto de primer evento.svg)
-Por ejemplo, lo más usual es que se llegue a visitar el sitio por un ad campaign hit desde un search engine.
+Por ejemplo, es usual es que se llegue a visitar el sitio por un ad campaign hit desde un search engine.
 
 En cuanto a los últimos eventos de un usuario, estos no suelen aparecer en grupos
 ![](imgs/Conjunto de ultimo evento.svg)
 
 Posteriormente, como limpieza de datos se ordenaron los eventos por timestamp y evento, definiendo el orden de los mismos como : 
 `'visited site' < 'ad campaign hit' < 'search engine hit' < 'generic listing' < 'searched products' < 'brand listing' < 'staticpage' < 'viewed product' < 'checkout' < 'lead' < 'conversion'`
-Esto fue necesario para propagar los datos de los eventos 'visited_site'
+Esto fue necesario para propagar los datos de los eventos `visited_site`
 
 ### Distribución temporal de los eventos
 
@@ -207,3 +211,20 @@ Es por muy lejos lo más usual que un usuario acceda desde un solo dispositivo.
 ## Distribucion de los usuarios en el país
 
 ![](imgs/Visited Sites by country zones.png)
+
+# Conclusiones
+* Hay una predominancia clara de busquedas por iphones, seguidos de las gamas A y S de Samsung, y en menor medida por la gama G de Motorola.
+    * Esto se condice con las marcas más populares, tanto en el mercado en general como en el uso del sitio
+* Si bien los usuarios pueden acceder desde hasta seis dispositivos distintos, lo más usual por un amplio margen es que accedan desde sólo uno.
+* La media de cantidad de visitas distintas hasta que un usuario realiza su primer conversión es `2`, lo que junto con el punto anterior nos hace sospechar que es posible que se distingan como usuarios distintos usuarios a la misma persona accediendo desde distintos dispositivos.
+* No se encontró relación entre:
+    * Resolución de pantalla (y suponemos que en consecuencia poder adquisitivo) y cantidad de visitas hasta la primer conversión
+    * Dispositivo desde el que accede un usuario y cantidad de conversiones
+* Hay una proporción muy grande de usuarios que usan el sitio por muy poco tiempo y no realizan ninguna conversión:
+    * Tanto la cantidad de eventos como el tiempo pasado en el sitio son considerablemente mayores en los usuarios que realizan conversiones.
+    * La distribución de tiempo pasado en el sitio comparada a la cantidad de los distintos tipos de eventos muestra en general un trend decreciente.
+* El sitio tiene más uso en horario diurno desde computadoras, y durante la noche desde dispositivos móviles.
+* Los modelos de teléfonos más comprados no son exactamente los mismos que los más visitados: Los modelos de gama alta son más visitados pero en general tienen mejor ratio de conversión los de gama media/baja.
+* El sitio vio un enorme incremento en la cantidad de eventos, y los mismos abarcan desde comienzos de enero a las primeras dos semanas de junio
+* La cantidad de conversiones diarias decrece a medida que progresa el mes.
+* Es usual que se den varios eventos para un mismo usuario en el mismo segundo, lo que requiere especial cuidado al combinar los datos de distintos tipos de eventos.
