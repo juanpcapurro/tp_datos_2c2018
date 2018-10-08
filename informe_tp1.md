@@ -73,19 +73,15 @@ Y esta nueva feature nos permitirá tener una visión más global de los agentes
 Procedemos a ver si hay registros inválidos de búsquedas, y si amerita dropear registros.
 Por un lado, hay una proporción importante (7k nulos en 56k total) de eventos de búsqueda que tienen `NaN` como `search_term`, pero tienen distintas listas de `skus`, por lo que podemos suponer que hay otros factores que afectan a la búsqueda.
 
-### Eventos de visita de sitio
-<!--TODO: mover esto a donde se propagan los eventos y relacionar la resolucion con las compras-->
-<!--TODO: Los usuarios con resoluciones de pantalla mas grandes se toman mas tiempo para comprar, porque ya tienen un telefono cheto?-->
-Consideramos la resolución de pantalla una forma de ver qué poder adquisitivo tienen las personas que visitan el sitio.
-Medimos la cantidad de pídeles de las pantallas, porque hay muchas variantes de resoluciones y solo nos importa el tamaño.
-![](imgs/Distribución de cantidad de pixeles de las pantallas.svg)
 
-Nos interesó también que proporción de los usuarios accedían desde mobile y cuántos desde desktop
-![](imgs/Tipos de dispositivos.svg)
+## Campañas publicitarias
+Nos interesó saber si había relación entre las campañas que atraían la mayor cantidad de usuarios y si había diferencias significativas con aquellas que aportan más conversiones:
 
-Volviendo a las resoluciones de pantalla, mirar el listado nos permite ver cuáles son las mas populares, lo que es congruente con el primer gráfico de este apartado:
-![](imgs/Cantidad por tipos de resoluciones.svg)
-La mayoría de las visitas son desde dispositivos con resoluciones de pantalla bajas, lo cual confirma nuestra presuposición de que los usuarios del sitio son de bajo poder adquisitivo, o por lo menos no lo reflejan en los dispositivos que usan para acceder al sitio.
+![](imgs/Ingresos por campaña publicitaria.svg)
+
+![](imgs/Conversiones por campaña publicitaria.svg)
+
+Si bien en las campañas más grandes hay mayor relación entre las que traen mas visitas y las que traen mas conversiones, hay algunos cambios en las más chicas, y puede verse que hay algunas campañas para las que no hay ninguna conversión.
 
 # Exploración de los eventos en conjunto
 El uso de la plataforma aumentó enormemente a lo largo de los últimos meses:
@@ -97,8 +93,18 @@ Y la distribución de los eventos a lo largo del día no nos da muchas sorpresas
 
 ![](imgs/Distribucion de eventos en las horas del dia.svg)
 
-Los usuarios pueden tener una cantidad variable de eventos, y es usual que tengan algunos cientos, con outliers teniendo un par de miles. Estos outliers no aparecen en el gráfico porque lo volverían ilegible.
+Por otro lado, podemos analizar si esta distribución varía según el tipo de dispositivos desde los que el usuario accede:
+Las visitas desde computadoras son mayormente responsables por el horario diurno, y las visitas desde smartphones por el uso nocturno del sitio:
+![](imgs/Distribucion de eventos desde una computadora en las horas del dia.svg)
+![](imgs/Distribucion de eventos desde smartphones en las horas del dia.svg)
 
+Las conversiones son más abundantes en los dias de semana que los fines de semana y también se concentran en el comienzo del mes:
+
+![Los dias de la semana empiezan el lunes en este grafico](imgs/Ventas por dia del mes y semana.svg)
+
+Esto último es congruente con el hecho de que los trabajadores suelen cobrar su salario en los primeros dias del mes, y por ende tienen en ese período de tiempo dinero disponible.
+
+Los usuarios pueden tener una cantidad variable de eventos, y es usual que tengan algunos cientos, con outliers teniendo un par de miles. Estos outliers no aparecen en el gráfico porque lo volverían ilegible.
 ![](imgs/Cantidad de eventos general vs compradores.svg)
 
 Los usuarios que realizan una conversión tienen muchos más eventos que el público en general.
@@ -131,6 +137,10 @@ Por ejemplo, lo más usual es que se llegue a visitar el sitio por un ad campaig
 En cuanto a los últimos eventos de un usuario, estos no suelen aparecer en grupos
 ![](imgs/Conjunto de ultimo evento.svg)
 
+Posteriormente, como limpieza de datos se ordenaron los eventos por timestamp y evento, definiendo el orden de los mismos como : 
+`'visited site' < 'ad campaign hit' < 'search engine hit' < 'generic listing' < 'searched products' < 'brand listing' < 'staticpage' < 'viewed product' < 'checkout' < 'lead' < 'conversion'`
+Esto fue necesario para propagar los datos de los eventos 'visited_site'
+
 ### Distribución temporal de los eventos
 
 Los usuarios pasan cantidades de tiempo muy variadas en la plataforma, y se puede destacar que hay una proporción alta de outliers que tienen eventos separados por varios miles de horas. Estos no son mostrados en el gráfico porque lo volverían ilegible.
@@ -146,11 +156,53 @@ Se puede ver que los eventos en general se aglomeran alrededor de una serie de c
 Esto es claro con los eventos de `visited site`, que tabmién son los únicos con una tendencia creciente:
 ![](imgs/Tiempo pasado en el sitio vs cantidad de event_visited site.svg)
 
+Estas aglomeraciones son congruentes con los picos de uso del sitio.
+
 ## Propagacion de datos de eventos
 Como los eventos de `visted site` tienen mucha información sobre el usuario, se eligió propagar los datos de estos eventos a los subsiguientes, para poder hacer relaciones entre, por ejemplo, conversiones y tipos de dispositivo.
 
 Se presentó la dificultad de que había usuarios que tenían eventos previos a un `visited site`.
-Elegimos descartar esos eventos dado que son muy reducidos en numero (~5k en 1M de eventos), y en los casos que hicimos un análisis anecdótico del flujo del usuario en cuestión encontramos anomalías justificables (eg: los datos eran de comienzos de enero o )
+Elegimos descartar esos eventos dado que son muy reducidos en numero (~5k en 1M de eventos).
+
+También se agregó el número de visita al que pertenece la actividad de un usuario.
+Resultó de interés en qué numero de visita suelen realizarse las conversiones:
+
+![En este grafico se muestra la cantidad de visitas para todos los usuarios, comparada con la cantidad de visitas que tiene un usuario en su primer y ultima conversion](imgs/Cantidad de visitas distintas.svg)
+
+Es posible que haya pérdida de información en lo que respecta a seguir a una misma persona, nos parece extraño que de los usuarios que realizan conversiones, la media entre dos veces al sitio hasta hacer la primera.
+
+## Comportamiento mobile vs desktop
+Nos interesó que proporción de los usuarios accedían desde mobile y cuántos desde desktop
+![](imgs/Tipos de dispositivos.svg)
+No se encontró diferencia significativa en estas proporciones en los eventos de conversión.
+Una hipótesis posible era que iban a haber más conversiones desde computadoras que desde telefonos, por los casos de usuarios que se quedan de imprevisto sin teléfono.
+
+Consideramos la resolución de pantalla una forma de ver qué poder adquisitivo tienen las personas que visitan el sitio.
+Medimos la cantidad de pídeles de las pantallas, porque hay muchas variantes de resoluciones y solo nos importa el tamaño.
+
+Volviendo a las resoluciones de pantalla, mirar el listado nos permite ver cuáles son las mas populares, lo que es congruente con el primer gráfico de este apartado:
+![](imgs/Cantidad por tipos de resoluciones.svg)
+La mayoría de las visitas son desde dispositivos con resoluciones de pantalla bajas, lo cual confirma nuestra presuposición de que los usuarios del sitio son de bajo poder adquisitivo, o por lo menos no lo reflejan en los dispositivos que usan para acceder al sitio.
+
+Los eventos de conversion en particular, parecen presentar con mas frecuencia resoluciones bajas:
+![](imgs/Resoluciones de pantalla con conversiones.svg)
+
+Verificamos esto mediante la metrica de cantidad de pixeles de la pantalla:
+
+![](imgs/Distribucion de cantidad de pixeles del dispositivo.svg)
+Si bien la media es menor, no hay una variación importante en esta feature.
+
+No se halló relación entre la resolución de pantalla y la cantidad de visitas necesarias hasta la primer conversión:
+
+![](imgs/Resolucion de pantalla vs visitas al sitio hasta primera conversion.svg)
+
+Por lo que no podemos decir que esto ultimo no tiene relación con su poder adquisitivo.
+
+Otra observación extraída en este análisis es desde cuántos dispositivos distintos accede un usuario:
+
+![](imgs/Cantidad de dispositivos desde los que accede un usuario.svg)
+
+Es por muy lejos lo más usual que un usuario acceda desde un solo dispositivo.
 
 ## Distribucion de los usuarios en el país
 
