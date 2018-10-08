@@ -75,6 +75,7 @@ Por un lado, hay una proporción importante (7k nulos en 56k total) de eventos d
 
 ### Eventos de visita de sitio
 <!--TODO: mover esto a donde se propagan los eventos y relacionar la resolucion con las compras-->
+<!--TODO: Los usuarios con resoluciones de pantalla mas grandes se toman mas tiempo para comprar, porque ya tienen un telefono cheto?-->
 Consideramos la resolución de pantalla una forma de ver qué poder adquisitivo tienen las personas que visitan el sitio.
 Medimos la cantidad de pídeles de las pantallas, porque hay muchas variantes de resoluciones y solo nos importa el tamaño.
 ![](imgs/Distribución de cantidad de pixeles de las pantallas.svg)
@@ -135,11 +136,21 @@ En cuanto a los últimos eventos de un usuario, estos no suelen aparecer en grup
 Los usuarios pasan cantidades de tiempo muy variadas en la plataforma, y se puede destacar que hay una proporción alta de outliers que tienen eventos separados por varios miles de horas. Estos no son mostrados en el gráfico porque lo volverían ilegible.
 
 ![](imgs/Tiempo que pasan los usuarios en el sitio.svg)
-TODO: rehacer esto sacando los outliers.
-Por otro lado, no se encontró relación entre el tiempo que un usuario lleva usando el sitio y la cantidad de eventos de algún tipo en particular que genera.
+Los distintos tipos de eventos tienen una concentración en valores bajos de tiempo gastado en el sitio. Algunos presentan curvas claramente decrecientes, como las de `staticpage`:
+![](imgs/Tiempo pasado en el sitio vs cantidad de event_staticpage.svg)
+
+Pero la mayoría simplemente presentan una distribución plana con una aglomeración en valores bajos de cantidad de eventos y tiempo, sin que se pueda ver una tendencia clara, como es el caso de `searched products`:
+![](imgs/Tiempo pasado en el sitio vs cantidad de event_searched products.svg)
+
+Se puede ver que los eventos en general se aglomeran alrededor de una serie de cantidad de horas de uso del sitio.
+Esto es claro con los eventos de `visited site`, que tabmién son los únicos con una tendencia creciente:
+![](imgs/Tiempo pasado en el sitio vs cantidad de event_visited site.svg)
 
 ## Propagacion de datos de eventos
-TODO
+Como los eventos de `visted site` tienen mucha información sobre el usuario, se eligió propagar los datos de estos eventos a los subsiguientes, para poder hacer relaciones entre, por ejemplo, conversiones y tipos de dispositivo.
+
+Se presentó la dificultad de que había usuarios que tenían eventos previos a un `visited site`.
+Elegimos descartar esos eventos dado que son muy reducidos en numero (~5k en 1M de eventos), y en los casos que hicimos un análisis anecdótico del flujo del usuario en cuestión encontramos anomalías justificables (eg: los datos eran de comienzos de enero o )
 
 ## Distribucion de los usuarios en el país
 
